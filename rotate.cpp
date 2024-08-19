@@ -59,6 +59,9 @@ cout<<"ele are:";
     
    }
 
+
+approch 2 -  can also be done by reversing till k and other 
+and revresing whole array
     
 
 

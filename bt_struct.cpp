@@ -225,6 +225,77 @@ int inorder_right(struct node* root){
     return root->data;
 
 }
+bool check_2(struct node* root,int n1,int n2){
+
+    if(root == NULL){
+        return false;
+    }
+    if(root->data == n1 || root->data == n2){
+        return true;
+    }
+    bool l = check_2(root->left,n1,n2);
+    bool r = check_2(root->right,n1,n2);
+    if(l && r){
+        return true;
+    }
+    if( !l && !r){
+        return false;
+    }
+    if(l && !r){
+       return  check_2(root->left,n1,n2);
+    }
+    return check_2(root->right,n1,n2);
+
+}
+int distance_2(struct node* root,int n1,int dis){
+    if(root == NULL){
+        cout<<"dis3"<<" ";
+        return -1;
+    }
+    if(root->data = n1){
+        cout<<"dis"<<" ";
+        return dis;
+    }
+    int ldis = distance_2(root->left,n1,dis+1);
+    if(ldis != -1){
+        cout<<"dis2"<<" ";
+        return ldis;
+    }
+    cout<<"dis4"<<" ";
+    return distance_2(root->right,n1,dis+1);
+}
+
+void getnodes_dis(struct node* root,int dis,map<int,vector<int>> &m){
+    if(root == NULL){
+        return ;
+    }
+    m[dis].push_back(root->data);
+    getnodes_dis(root->left,dis-1,m);
+    getnodes_dis(root->right,dis+1,m);
+
+}
+
+int min_dia_bet2(struct node* root,int n1,int n2){
+int cur = 0;
+if(root == NULL){
+    return -1;
+}
+
+else if(check_2(root,n1,n2)){
+    cout<<" hitted"<<" ";
+    int ld = distance_2(root,n1,0);
+    
+    int rd = distance_2(root,n2,0);
+    cout<<ld<<" "<<rd<<"";
+    cur = ld + rd;
+}
+//cout<<"hitted"<<" ";
+int lmin = min_dia_bet2(root->left,n1,n2);
+int rmin = min_dia_bet2(root->right,n1,n2);
+return min(cur,min(lmin,rmin));
+
+
+}
 bool check_bst_inorderseccusor(struct node* root){
     if(root == NULL){
         return true;
@@ -296,16 +367,17 @@ int main(){
      
      inprint(root);
      cout<<"\n";
+     //cout<<min_dia_bet2(root,6,3);
 
-      if(check_bst_inorderseccusor(root)){
-    cout<<"yes it is bst"<<" ";
+//       if(check_bst_inorderseccusor(root)){
+//     cout<<"yes it is bst"<<" ";
 
-}
-else{
-     cout<<"no it is not bst"<<" ";
+// }
+// else{
+//      cout<<"no it is not bst"<<" ";
 
 
-}
+// }
 
 // if(check_bst_mm(root,INT_MAX,INT_MIN)){
 //     cout<<"yes it is bst"<<" ";
@@ -343,5 +415,15 @@ else{
 //      else{
 //         cout<<" subtree not present";
 //      }
+
+map<int,vector<int>> m;
+getnodes_dis(root,0,m);
+for(const auto &i : m){
+    for(const auto &j : i.second){
+        cout<<j<<" ";
+    }
+    cout<<"\n";
+
+}
     return 0;
 }
